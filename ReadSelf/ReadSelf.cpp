@@ -3,16 +3,14 @@
 #include <string>
 #include <Windows.h>
 
-//26
-
 int main()
 {
     const std::string imageNum = "00";
+    std::string pass = "pass1234word";
 
     CHAR czTempPath[MAX_PATH] = { 0 };
     GetTempPathA(MAX_PATH, czTempPath);
 
-    std::string pass = "pass1234word";
     std::string passenter;
 
     std::cout << ">> ";
@@ -22,12 +20,7 @@ int main()
 
     std::ifstream in;
     in.open("./readimage" + imageNum + ".exe", std::ios::binary);
-    int i = 0;
-    int png[4];
-    int counter = 0;
-    bool isInPng = false;
 
-    std::string pngcontent = "";
 
     std::string sPath = czTempPath;
     sPath += "readimage" + imageNum + ".png";
@@ -36,13 +29,18 @@ int main()
     out.open(sPath.c_str(), std::ios::binary);
 
     out << (char)0x89 << (char)0x50 << (char)0x4E << (char)0x47;
+
+    int png[4];
+    int counter = 0;
+    bool isInPng = false;
+
+    std::string pngcontent = "";
     
     while (!in.eof())
     {
         if (!isInPng)
         {
             png[counter] = (int)in.get();
-            i++;
             counter++;
             if (counter == 4)
             {
